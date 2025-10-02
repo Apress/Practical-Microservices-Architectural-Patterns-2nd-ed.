@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Set Log4j2 internal logging level to WARN to reduce noise -->
+<Configuration status="WARN">
+
+  <!-- Define all appenders (output destinations) -->
+  <Appenders>
+    <!-- Console appender configuration -->
+    <Console name="Console" target="SYSTEM_OUT">
+      <!-- Pattern: timestamp | log level | class.method:line | message -->
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %C.%M:%L - %m%n"/>
+    </Console>
+    
+    <!-- Rolling file appender for persistent logging -->
+    <RollingFile name="RollingFile" 
+                 fileName="logs/application.log"
+                 filePattern="logs/application-%d{yyyy-MM-dd}-%i.log">
+      <!-- Use same pattern as console for consistency -->
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %C.%M:%L - %m%n"/>
+      <!-- Define when to roll over log files -->
+      <Policies>
+        <!-- Roll over when file reaches 10 MB -->
+        <SizeBasedTriggeringPolicy size="10 MB"/>
+        <!-- Roll over daily -->
+        <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+      </Policies>
+      <!-- Keep maximum 5 rolled over files -->
+      <DefaultRolloverStrategy max="5"/>
+    </RollingFile>
+  </Appenders>
+  
+  <!-- Configure loggers -->
+  <Loggers>
+    <!-- Application-specific logger -->
+    <Logger name="com.acme.ch06.ex01" level="DEBUG" additivity="false">
+      <!-- Send logs to both console and file -->
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="RollingFile"/>
+    </Logger>
+    
+    <!-- Root logger catches all other logging -->
+    <Root level="ERROR">
+      <!-- Send logs to both console and file -->
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="RollingFile"/>
+    </Root>
+  </Loggers>
+  
+</Configuration>

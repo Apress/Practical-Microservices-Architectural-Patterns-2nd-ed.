@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans
+         https://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/rabbit
+         https://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
+
+    <!-- Define the connection factory to connect to RabbitMQ broker -->
+    <rabbit:connection-factory id="connectionFactory"
+                                host="localhost"
+                                port="5672"
+                                username="guest"
+                                password="guest"/>
+
+    <!-- RabbitAdmin automatically declares queues, exchanges, and bindings -->
+    <rabbit:admin connection-factory="connectionFactory"/>
+
+    <!-- Declare a queue named 'anonymousQueue' -->
+    <rabbit:queue id="anonymousQueue"/>
+
+    <!-- Declare a topic exchange named 'SAMPLE_EXCHANGE' -->
+    <rabbit:topic-exchange id="exchange" name="SAMPLE_EXCHANGE">
+        <rabbit:bindings>
+            <!-- Bind 'anonymousQueue' to 'SAMPLE_EXCHANGE' using the routing key pattern 'my.routingkey.*' -->
+            <rabbit:binding queue="anonymousQueue" pattern="my.routingkey.*"/>
+        </rabbit:bindings>
+    </rabbit:topic-exchange>
+
+    <!-- Register the message listener -->
+    <bean id="listener" class="com.acme.ch06.ex02.Listener"/>
+
+    <!-- Configure the listener container -->
+    <rabbit:listener-container connection-factory="connectionFactory">
+        <rabbit:listener ref="listener" queues="anonymousQueue"/>
+    </rabbit:listener-container>
+
+</beans>

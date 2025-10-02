@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+
+	<rabbit:connection-factory id="connectionFactory" host="localhost" port="5671" username="guest" password="guest" />
+
+	<rabbit:admin connection-factory="connectionFactory" />
+
+	<rabbit:queue id="otherAnon" name="remoting.queue"/>
+	<!--rabbit:queue id="otherAnon"/-->
+
+	<rabbit:topic-exchange id="exchange" name="SAMPLE_EXCHANGE">
+		<rabbit:bindings>
+			<rabbit:binding queue="otherAnon" pattern="my.routingkey.*"></rabbit:binding>
+		</rabbit:bindings>
+	</rabbit:topic-exchange>
+
+	<bean id="listener" class="com.acme.ch06.ex03.Listener" />
+
+	<rabbit:listener-container id="myListenerContainer" connection-factory="connectionFactory">
+	<rabbit:listener ref="listener" queues="otherAnon" /></rabbit:listener-container>
+	
+</beans>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Logs messages to the console for debugging purposes -->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <Target>System.out</Target>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}.%method:%L - %m%n</pattern>
+        </encoder>
+    </appender>
+    
+    <logger name="com.acme.ch06.example02" additivity="false" level="DEBUG">
+        <appender-ref ref="stdout"/>
+    </logger>
+    
+    <!-- Root logger is set to WARN for production to suppress debug and info logs.
+         For development, consider changing the level to DEBUG or INFO. -->
+    <root level="WARN">
+        <appender-ref ref="stdout"/>
+    </root>
+    
+</configuration>

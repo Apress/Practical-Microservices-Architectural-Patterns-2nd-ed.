@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The 'status' attribute controls the internal logging level of Log4j2.
+     'WARN' means Log4j2 will log warnings and errors about its own configuration or operation. -->
+<Configuration status="WARN">
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <!-- Pattern explanation:
+           %d{yyyy-MM-dd HH:mm:ss} - Timestamp in the format 'yyyy-MM-dd HH:mm:ss'
+           %-5p - Log level padded to 5 characters
+           %C - Fully qualified class name
+           %M - Method name
+           %L - Line number
+   <Logger name="com.acme.ch06" level="DEBUG" additivity="false">
+           %n - Newline -->
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %C.%M:%L - %m%n"/>
+    </Console>
+  </Appenders>
+  
+  <Loggers>
+  
+   <Logger name="com.acme.ch06.ex02" level="DEBUG" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
+    
+    <Root level="DEBUG">
+      <AppenderRef ref="Console"/>
+    </Root>
+    
+  </Loggers>
+  
+</Configuration>
